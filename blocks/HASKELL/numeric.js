@@ -2,6 +2,26 @@
 goog.require('Blockly.Blocks');
 goog.require('Blockly');
 goog.provide('Blockly.Blocks.HaskNum');
+/* neutral type numbers "Num", to be used when recursive type check function is working*/
+Blockly.Blocks['haskNum1'] = {
+    init: function() {
+        this.appendValueInput('VALUE')
+            .setCheck('Num')
+            .appendField("5");
+       this.setOutput(true, 'Num');
+       this.setColour('#919191');
+    }
+};
+
+Blockly.Blocks['haskNum2'] = {
+    init: function() {
+        this.appendValueInput('VALUE')
+            .setCheck('Num')
+            .appendField("12");
+       this.setOutput(true, 'Num');
+       this.setColour('#919191');
+    }
+};
 
 Blockly.Blocks['haskint'] = {
     init: function() {
