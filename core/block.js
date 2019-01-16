@@ -1665,7 +1665,7 @@ Blockly.Block.prototype.toDevString = function() {
   return msg;
 };
 
-// Max Tune
+/* Max Tune
 
 
 Blockly.Block.prototype.test = function() {
@@ -1676,3 +1676,10 @@ Blockly.Block.prototype.test = function() {
     }
     }
   };
+
+Blockly.Block.prototype.test2 = function() {
+  if (this.childBlocks_ != []) {
+  this.setCheck = this.childBlocks_.setCheck;
+  }    
+}
+*/
