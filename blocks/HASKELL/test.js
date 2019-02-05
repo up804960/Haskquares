@@ -3,66 +3,61 @@ goog.require('Blockly.Blocks');
 goog.require('Blockly');
 goog.provide('Blockly.Blocks.HaskTest');
 
-// Booleans
-Blockly.Blocks['hasktrue'] = {
+Blockly.Blocks['haskTestCoreNum'] = {
+  init: function() {
+    this.appendValueInput("inputL")
+        .setCheck(TypeClass[0])
+        .appendField("");
+    this.appendValueInput("inputR")
+        .setCheck(TypeClass[0])
+        .appendField("+");
+    this.setInputsInline(true);
+    this.setOutput(true, TypeClass[0])
+    this.setColour('#4286f4');
+  }
+};
+
+Blockly.Blocks['haskTestCoreReal'] = {
+  init: function() {
+    this.appendValueInput("inputL")
+        .setCheck(TypeClass[1])
+        .appendField("");
+    this.appendValueInput("inputR")
+        .setCheck(TypeClass[1])
+        .appendField("+");
+    this.setInputsInline(true);
+    this.setOutput(true, TypeClass[1])
+    this.setColour('#2845a3');
+  }
+};
+
+
+Blockly.Blocks['haskTestInputNum'] = {
     init: function() {
         this.appendValueInput('VALUE')
-            .setCheck('Null')
-            .appendField("true");
-       this.setOutput(true, 'Boolean');
-       this.setColour('#4315af');
+            .setCheck(['Null'])
+            .appendField("52");
+       this.setOutput(true, TypeClass[0]);
+       this.setColour('#7c1c6d');
     }
 };
 
-Blockly.Blocks['haskfalse'] = {
+Blockly.Blocks['haskTestInputReal'] = {
     init: function() {
         this.appendValueInput('VALUE')
-            .setCheck('Null')
-            .appendField("false");
-       this.setOutput(true, 'Boolean');
-       this.setColour('#4315af');
+            .setCheck(['Null'])
+            .appendField("501");
+       this.setOutput(true, TypeClass[1]);
+       this.setColour('#7c1111');
     }
 };
 
-//Numerics
-
-Blockly.Blocks['haskint'] = {
+Blockly.Blocks['haskTestInputRealFrac'] = {
     init: function() {
         this.appendValueInput('VALUE')
-            .setCheck('Null')
-            .appendField("13");
-       this.setOutput(true, 'Int');
-       this.setColour('#f44b42');
-    }
-};
-
-Blockly.Blocks['haskdouble'] = {
-    init: function() {
-        this.appendValueInput('VALUE')
-            .setCheck('Null')
-            .appendField("3.14");
-       this.setOutput(true, 'Double');
-       this.setColour('#14a8a0');
-    }
-};
-
-//Strings
-Blockly.Blocks['haskchar'] = {
-    init: function() {
-        this.appendValueInput('VALUE')
-            .setCheck('Null')
-            .appendField("t");
-       this.setOutput(true, 'Char');
-       this.setColour('#22e23b');
-    }
-};
-
-Blockly.Blocks['haskstring'] = {
-    init: function() {
-        this.appendValueInput('VALUE')
-            .setCheck('Null')
-            .appendField("words");
-       this.setOutput(true, 'String');
-       this.setColour('#22e23b');
+            .setCheck(['Null'])
+            .appendField("255");
+       this.setOutput(true, TypeClass[5]);
+       this.setColour('#6a1531');
     }
 };
