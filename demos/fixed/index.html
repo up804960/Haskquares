@@ -8,6 +8,7 @@
   <script src="../../blocks/HASKELL/typing.js"></script>
   <script src="../../blocks/HASKELL/boolean.js"></script>
   <script src="../../blocks/HASKELL/character.js"></script>
+  <script src="../../blocks/HASKELL/test.js"></script>
   <script src="../../msg/js/en.js"></script>
   <style>
     body {
@@ -28,16 +29,18 @@
 
   <p>&rarr; More info on <a href="https://developers.google.com/blockly/guides/configure-blockly/web/fixed-size">injecting fixed-sized Blockly</a>&hellip;</p>
 
-  <div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
+  <div id="blocklyDiv" style="height: 720px; width: 1280px;"></div>
 
   <xml id="toolbox" style="display: none">
     <block type="hasktrue"></block>
-    <block type="haskfalse"></block>
     <block type="haskint"></block>
     <block type="haskdouble"></block>
     <block type="haskchar"></block>
-    <block type="haskstring"></block>
-    <block type="hasksum2"></block>
+    <block type="haskTestCoreNum"></block>
+    <block type="haskTestCoreReal"></block>
+    <block type="haskTestInputNum"></block>
+    <block type="haskTestInputReal"></block>
+    <block type="haskTestInputRealFrac"></block>
   </xml>
 
   <script>
