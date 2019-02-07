@@ -675,7 +675,7 @@ Blockly.Connection.prototype.toString = function() {
 
 
 // Marker 00 UP804960 Code from here:
-var TypeClass = [
+var TypeClassClassic = [
   ['Num', [], ['Real', 'Fractional'], ['Int', 'Integer', 'Float', 'Double']],
   ['Real', ['Num'], ['Integral', 'RealFrac'], ['Int', 'Integer', 'Float', 'Double']],
   ['Fractional', ['Num'], ['RealFrac', 'Floating'], ['Float',  'Double']],
@@ -684,7 +684,18 @@ var TypeClass = [
   ['RealFrac', ['Real', 'Fractional'], ['RealFloat'], ['Float', 'Double']],
   ['Floating', ['Fractional'], ['RealFloat'], ['Float', 'Double']],
   ['RealFloat', ['RealFrac', 'Floating'], [], ['Float', 'Double']]
-]
+];
+
+var TypeClass = [
+  ['Num', [], [['Real', 1], ['Fractional', 2]], ['Int', 'Integer', 'Float', 'Double']],
+  ['Real', [['Num', 0]], [['Integral'], ['RealFrac']], ['Int', 'Integer', 'Float', 'Double']],
+  ['Fractional', [['Num', 0]], [['RealFrac', 5], ['Floating', 6]], ['Float',  'Double']],
+  ['Enum', [], [['Integral', 4]], ['Int', 'Integer', 'Bool', 'Char', '()']],
+  ['Integral', [['Enum', 3], ['Real', 1]], [], ['Int', 'Integer']],
+  ['RealFrac', [['Real', 1], ['Fractional', 2]], [['RealFloat', 7]], ['Float', 'Double']],
+  ['Floating', [['Fractional', 2]], [['RealFloat', 7]], ['Float', 'Double']],
+  ['RealFloat', [['RealFrac', 5], ['Floating', 6]], [], ['Float', 'Double']]
+];
 
 Blockly.Connection.prototype.checkType_ = function(otherConnection) {
   if (!this.check_ || !otherConnection.check_) {
@@ -692,32 +703,40 @@ Blockly.Connection.prototype.checkType_ = function(otherConnection) {
     return true;
   }
   // Find any intersection in the check lists.
-  for (var i = 0; i < this.check_.length; i++) {
-    if (otherConnection.check_[0] == this.check_[0]) {
-      console.log('Same Type', otherConnection.check_[0]);
-      return true;
-    }
-    else if (otherConnection.check_[0] == 'Null') {
-      console.log('Both objects are input blocks');
-      return false; // Prevents inputs from connecting when they shouldn't be
-    }
-    else if (otherConnection.check_[1].indexOf(this.check_[0]) != -1) {
-      console.log('Parent TypeClass:', this.check_[0], 'is parent of', otherConnection.check_[0]);
-      return true;
-    }
-    else if (otherConnection.check_[2].indexOf(this.check_[0]) != -1) {
-      console.log('Child TypeClass:', this.check_[0], 'is child of', otherConnection.check_[0]);
-      return true;
-    }
-    else if (otherConnection.check_[3].indexOf(this.check_[0]) != -1) {
-      console.log('This is an Accepted Type');
-      return true;
-    }
+  if (otherConnection.check_[0] == this.check_[0]) {
+    console.log('Same Type', otherConnection.check_[0]);
+    return true;
   }
-  // No intersection.
-  return false;
+  else if (otherConnection.check_[0] == 'Null') {
+    console.log('Both objects are input blocks');
+    return false; // Prevents inputs from connecting when they shouldn't be
+  }
+  else if (otherConnection.check_[1].indexOf(this.check_[0]) != -1) {
+    console.log('Parent TypeClass:', this.check_[0], 'is parent of', otherConnection.check_[0]);
+    return true;
+  }
+  else if (otherConnection.check_[2].indexOf(this.check_[0]) != -1) {
+    console.log('Child TypeClass:', this.check_[0], 'is child of', otherConnection.check_[0]);
+    return true;
+  }
+  else if (otherConnection.check_[3].indexOf(this.check_[0]) != -1) {
+    console.log('This is an Accepted Type');
+    return true;
+  }
+  for (var i = 0; i < this.check_[1].length; i++) {
+    console.log("Parent Check");
+    this.check_ = TypeClass[this.check_[1][i]
+    !this.checkType_(this.targetConnection);
+    }
+  for (var i = 0; i < this.check_[2].length; i++) {
+    console.log("Child Check");
+    this.check_ = TypeClass[this.check_[2][i]
+    !this.checkType_(this.targetConnection);
+    }
+// No intersection.
+return false;
 };
-
+  //for (var i = 0; i < this.check_[2].length; i++) {
 Blockly.Connection.prototype.HaskTypeClassDown = function(otherConnection) {
 
 }
