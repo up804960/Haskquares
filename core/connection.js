@@ -549,32 +549,6 @@ Blockly.Connection.prototype.targetBlock = function() {
 };
 
 /**
- * Is this connection compatible with another connection with respect to the
- * value type system.  E.g. square_root("Hello") is not compatible.
- * @param {!Blockly.Connection} otherConnection Connection to compare against.
- * @return {boolean} True if the connections share a type.
- * @protected
- */
-Blockly.Connection.prototype.checkType34_ = function(otherConnection) {
-  if (!this.check_ || !otherConnection.check_) {
-    // One or both sides are promiscuous enough that anything will fit.
-    return true;
-  }
-  // Find any intersection in the check lists.
-  for (var i = 0; i < this.check_.length; i++) {
-    if (otherConnection.check_.indexOf(this.check_[i]) != -1) {
-      //MARKER 01 THIS IS WHERE COMPARISIONS OF BLOCK TYPES FIRST OCCURS
-      //this.check_ is the dragged block & OtherConnection is stationary
-      console.log(this.check_);
-      console.log(otherConnection.check_[0] == this.check_[0]);
-      return true;
-    }
-  }
-  // No intersection.
-  return false;
-};
-
-/**
  * Function to be called when this connection's compatible types have changed.
  * @private
  */
@@ -687,14 +661,14 @@ var TypeClass0 = [
 ];
 
 var TypeClass = [
-  [0, [], [1, 2], ['Int', 'Integer', 'Float', 'Double']],   //Num
-  [1, [0], [4, 5], ['Int', 'Integer', 'Float', 'Double']], //Real
-  [2, [0], [5, 6], ['Float',  'Double']],            //Fractional
-  [3, [], [4], ['Int', 'Integer', 'Bool', 'Char', '()']],  //Enum
-  [4, [1, 3], [], ['Int', 'Integer']],                 //Integral
-  [5, [1, 2], [7], ['Float', 'Double']],               //RealFrac
-  [6, [2], [7], ['Float', 'Double']],                  //Floating
-  [7, [5, 6], [], ['Float', 'Double']]                //RealFloat
+  [0, [], [1, 2], ['Int', 'Integer', 'Float', 'Double'], '#0061ff'],   //Num = Deep Blue
+  [1, [0], [4, 5], ['Int', 'Integer', 'Float', 'Double'], '#7eacf7'], //Real = Baby Blue 
+  [2, [0], [5, 6], ['Float',  'Double'], '#b6cff9'],            //Fractional = Ice Blue
+  [3, [], [4], ['Int', 'Integer', 'Bool', 'Char', '()'], '#ff2600'],  //Enum = Red
+  [4, [1, 3], [], ['Int', 'Integer'],'#f200ff'],                 //Integral = Purple
+  [5, [1, 2], [7], ['Float', 'Double'],'#62f70c'],               //RealFrac = Light Green
+  [6, [2], [7], ['Float', 'Double'],'#336814'],                  //Floating = Dark Green
+  [7, [5, 6], [], ['Float', 'Double'],'#cec10c']                //RealFloat = Yellow
 ];
 
 Blockly.Connection.prototype.checkType_ = function(otherConnection) {
@@ -719,6 +693,7 @@ Blockly.Connection.prototype.checkType_ = function(otherConnection) {
   //else if (otherConnection.check_[2].indexOf(this.check_[0]) != -1) {
   else if (this.CheckChild(this.check_, otherConnection.check_)) { //MARKER 03
     console.log('Child TypeClass:', this.check_[0], 'is child of', otherConnection.check_[0]);
+	console.log("blockClass", otherConnection.blockClass)
     return true;
   }
   else if (otherConnection.check_[3].indexOf(this.check_[0]) != -1) {
