@@ -649,6 +649,7 @@ Blockly.Connection.prototype.toString = function() {
 
 
 // Marker 00 UP804960 Code from here:
+//Legacy TypeClass List, was changed so that first item could be used for reference
 var TypeClass0 = [
   ['Num', [], ['Real', 'Fractional'], ['Int', 'Integer', 'Float', 'Double']],
   ['Real', ['Num'], ['Integral', 'RealFrac'], ['Int', 'Integer', 'Float', 'Double']],
@@ -660,9 +661,11 @@ var TypeClass0 = [
   ['RealFloat', ['RealFrac', 'Floating'], [], ['Float', 'Double']]
 ];
 
+//TypeClass list, used for reference with ALL Haskell blocks.
+//Next steps are changing type after creation and Type-Checking (Int, Integer etc)
 var TypeClass = [
   [0, [], [1, 2], ['Int', 'Integer', 'Float', 'Double'], '#0061ff'],   //Num = Deep Blue
-  [1, [0], [4, 5], ['Int', 'Integer', 'Float', 'Double'], '#7eacf7'], //Real = Baby Blue 
+  [1, [0], [4, 5], ['Int', 'Integer', 'Float', 'Double'], '#7eacf7'], //Real = Baby Blue
   [2, [0], [5, 6], ['Float',  'Double'], '#b6cff9'],            //Fractional = Ice Blue
   [3, [], [4], ['Int', 'Integer', 'Bool', 'Char', '()'], '#ff2600'],  //Enum = Red
   [4, [1, 3], [], ['Int', 'Integer'],'#f200ff'],                 //Integral = Purple
@@ -671,6 +674,78 @@ var TypeClass = [
   [7, [5, 6], [], ['Float', 'Double'],'#cec10c']                //RealFloat = Yellow
 ];
 
+// Num a => a -> a -> a
+// Int -> Int -> Int
+
+//SUM
+// [[blockClass[0], blockType], [blockType, blockType, blockType]
+// [['Num', 'a'], 'a','a','a']
+
+//first context = '__' type = [tuple{['a', 'b']}]
+
+//length context = '__' type = [ {list: 'a'}, 'Int']
+
+// Example one: [context, [situation, type]]
+//         ['', [tuple{['a', 'b']}], ['Int', '']]
+// -Adds an Integral block
+//         ['Integral', [tuple{['a', 'b']}], ['Int', '']]
+
+//Example two:
+//        [TypeClass[0], ['a, 'a', 'a'], ['']]
+// -Adds a Block, type Double, typeclass Floating
+//        [TypeClass[6], ['a, 'a', 'a'], ['Double'] ]
+
+//Testing Function
+Blockly.Connection.prototype.contextCheck = function(otherConnection) {
+  if (otherConnection.coreInfo[0] == '') {
+    assignNewClass(this.check_)
+    if (otherConnection.coreInfo[2] == '') {
+      assignNewType(this.check_)
+      return true
+    }
+  }
+  else if (otherConnection.coreInfo[0] == this.check_) {
+    if (this.blockType == otherConnection.coreInfo[2]) {
+      return true
+    }
+    else if (otherConnection.coreInfo[2] == '') {
+      assignNewType(this.check_)
+      return true
+    }
+    return false
+  }
+  else if (CheckParent(this.check_, otherConnection.coreInfo[0])) {
+    if (this.blockType == otherConnection.coreInfo[2]) {
+      return true
+    }
+    else if (otherConnection.coreInfo[2] == '') {
+      assignNewType(this.check_)
+      return true
+    }
+    return false
+  }
+  else if (CheckChild(this.check_, otherConnection.coreInfo[0])) {
+    if (this.blockType == otherConnection.coreInfo[2]) {
+      return true
+    }
+    else if (otherConnection.coreInfo[2] == '') {
+      assignNewType(this.check_)
+      return true
+    }
+    return false
+  }
+}
+
+Blockly.Connection.prototype.assignNewClass = function(InputBlock) {
+
+}
+
+Blockly.Connection.prototype.assignNewType = function(InputBlock) {
+
+}
+
+//Runs whenever a block is hovering over another block (or it connected blocks
+//are moving?) used to lead to CheckChild() and CheckParent()
 Blockly.Connection.prototype.checkType_ = function(otherConnection) {
   if (!this.check_ || !otherConnection.check_) {
     // One or both sides are promiscuous enough that anything will fit.
@@ -678,36 +753,37 @@ Blockly.Connection.prototype.checkType_ = function(otherConnection) {
   }
   // Find any intersection in the check lists.
   if (otherConnection.check_[0] == this.check_[0]) {
-    console.log('Same Type', otherConnection.check_[0]);
+    //console.log('Same Type', otherConnection.check_[0]);
     return true;
   }
   else if (otherConnection.check_[0] == 'Null') {
-    console.log('Both objects are input blocks');
+    //console.log('Both objects are input blocks');
     return false; // Prevents inputs from connecting when they shouldn't be
   }
-  //else if (otherConnection.check_[1].indexOf(this.check_[0]) != -1) {
   else if (this.CheckParent(this.check_, otherConnection.check_)) { //MARKER 02
-    console.log('Input is a Parent of Static Block');
+    //console.log('Input is a Parent of Static Block');
+    //console.log(otherConnection.check_[4])
+
     return true;
   }
-  //else if (otherConnection.check_[2].indexOf(this.check_[0]) != -1) {
   else if (this.CheckChild(this.check_, otherConnection.check_)) { //MARKER 03
-    console.log('Child TypeClass:', this.check_[0], 'is child of', otherConnection.check_[0]);
-	console.log("blockClass", otherConnection.blockClass)
+    //console.log('Child TypeClass:', this.check_[0], 'is child of', otherConnection.check_[0]);
+	  //console.log("colour", this.setColour)
     return true;
   }
   else if (otherConnection.check_[3].indexOf(this.check_[0]) != -1) {
-    console.log('This is an Accepted Type');
+    //console.log('This is an Accepted Type');
 
     return true;
   }
 return false;
 };
 
-//This currently does change the Input to the next stage down the hierarchy
-//However for some reason does not process this to make connection?
+//Loops through all parent dataTypes of the Static block, if it gets to the top
+//of the hierarchy and does not find the input block it returns false, as input
+//is not a parent of the static block
 Blockly.Connection.prototype.CheckParent = function(Input, Static) {
-  console.log(Input);
+  //console.log(Input);
   if (Static == undefined) {
     return false;
   }
@@ -719,14 +795,19 @@ Blockly.Connection.prototype.CheckParent = function(Input, Static) {
   }
 };
 
+//Loops through the parent blocks of the dragged block, after each Loop
+//the block sets itself to the current parent of the block
+//this then loops again. If the loop gets to the top of the hierarchy and
+//does not find the static block then it returns false, as it is not a child of
+//the static block
 Blockly.Connection.prototype.CheckChild = function(Input, Static) {
-  console.log(Input);
+  //console.log(Input);
   if (Input == undefined) {
-    console.log("False");
+    //console.log("False");
     return false;
   }
   else if (Static[2].indexOf(Input[0]) != -1) {
-    console.log("True");
+    //console.log("True");
     return true;
   }
   else {
@@ -734,19 +815,17 @@ Blockly.Connection.prototype.CheckChild = function(Input, Static) {
   }
 };
 
+//Things that are undefined currently for ProtoTypes:
+//setColour & blockClass. if setColour can be edited so that block colours can
+//be updated / changed then the same can be done with a block's TypeClass.
 
-  // Blockly.Connection.prototype.isChild = function(drag, stag) {
-  //   console.log("Entered isChild");
-  //   for (var i = 0; i < stag[2].length; i++) {
-  //     if (stag[2].indexOf(drag[0]) != -1) {
-  //       return true;
-  //     }
-  //     else if (drag[2].length < 1) {
-  //       console.log("Failing Child");
-  //       return false;
-  //     }
-  //     else {
-  //       this.isChild(drag, TypeClass[stag[2][i]]);
-  //     }
-  //   }
-  // };
+Blockly.Connection.prototype.CheckBlockType = function(Input, Static) {
+  if (Static.blockClass.includes(Input)){
+    console.log("WOWO");
+    return true
+  }
+  else {
+    console.log("FAILURE");
+    return true
+  }
+}
