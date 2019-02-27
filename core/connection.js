@@ -472,6 +472,7 @@ Blockly.Connection.lastConnectionInRow_ = function(startBlock, orphanBlock) {
  * Disconnect this connection.
  */
 Blockly.Connection.prototype.disconnect = function() {
+  //newColour = this.check_[4]; //MARKER02
   var otherConnection = this.targetConnection;
   if (!otherConnection) {
     throw Error('Source connection not connected.');
@@ -785,12 +786,15 @@ return false;
 Blockly.Connection.prototype.CheckParent = function(Input, Static) {
   //console.log(Input);
   if (Static == undefined) {
+    newColour = 'noChange'
     return false;
   }
   else if (Static[1].indexOf(Input[0]) != -1) {
+    newColour = Static[4]
     return true;
   }
   else {
+    newColour = Static[4]
     return this.CheckParent(Input, TypeClass[Static[1][0]]);
   }
 };
@@ -829,3 +833,13 @@ Blockly.Connection.prototype.CheckBlockType = function(Input, Static) {
     return true
   }
 }
+
+var newColour = 'noChange'
+
+Blockly.Connection.prototype.returnNewColour = function() {
+  return newColour
+};
+
+Blockly.Connection.prototype.resetColour = function(){
+  newColour = 'noChange'
+};

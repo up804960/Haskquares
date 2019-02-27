@@ -200,6 +200,7 @@ Blockly.BlockSvg.prototype.select = function() {
 /**
  * Unselect this block.  Remove its highlighting.
  */
+ //MARKER01 Could be useful, however only triggers when clicking OFF block, need something which triggers ON DROP
 Blockly.BlockSvg.prototype.unselect = function() {
   if (Blockly.selected != this) {
     return;
@@ -424,7 +425,14 @@ Blockly.BlockSvg.prototype.clearTransformAttributes_ = function() {
 /**
  * Snap this block to the nearest grid point.
  */
+ //MARKER02 this runs ON DROP so use this to call a colour check and hopefully it should work
 Blockly.BlockSvg.prototype.snapToGrid = function() {
+  console.log(this.colour_); //From this point to
+  if (Blockly.Connection.prototype.returnNewColour() != 'noChange') {
+    this.colour_ = Blockly.Connection.prototype.returnNewColour();
+    this.updateColour();
+    this.colour_ = Blockly.Connection.prototype.resetColour();
+  } // Here!
   if (!this.workspace) {
     return;  // Deleted block.
   }

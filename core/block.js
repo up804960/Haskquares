@@ -1665,9 +1665,9 @@ Blockly.Block.prototype.toDevString = function() {
   return msg;
 };
 
-/* UP804960 MARKER 00
+// UP804960 MARKER 00
 
-
+/*
 Blockly.Block.prototype.test = function() {
   console.log("colour: " + this.getColour());
   for (var i = 0, child; child = this.childBlocks_[i]; i++){
