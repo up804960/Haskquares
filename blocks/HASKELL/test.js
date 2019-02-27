@@ -6,6 +6,7 @@ goog.provide('Blockly.Blocks.HaskTest');
 Blockly.Blocks['haskTestCoreNum'] = {
   init: function() {
 	this.blockClass = TypeClass[0]
+  this.functionContext = [['Num', 'a'], ['a','a','a']]
     this.appendValueInput("inputL")
         .setCheck(this.blockClass)
         .appendField("");
@@ -32,12 +33,14 @@ Blockly.Blocks['haskTestInputNum'] = {
 Blockly.Blocks['haskTestCoreReal'] = {
   init: function() {
 	this.blockClass = TypeClass[1]
+  this.functionContext = [['Num', 'a'], ['a','a','a']]
+  this.currentContext = [['Num', 'a'], ['a','a','a']]
     this.appendValueInput("inputL")
         .setCheck(this.blockClass)
         .appendField("");
     this.appendValueInput("inputR")
         .setCheck(this.blockClass)
-        .appendField("+");
+        .appendField("-");
     this.setInputsInline(true);
     this.setOutput(true, this.blockClass)
     this.setColour(this.blockClass[4]);
@@ -70,12 +73,14 @@ Blockly.Blocks['haskTestInputRealFrac'] = {
 Blockly.Blocks['haskTestCoreEnum'] = {
   init: function() {
 	this.blockClass = TypeClass[3]
+  this.functionContext = [['Enum', 'a'], ['a','a',['a']]]
+  this.currentContext = [['Enum', 'a'], ['a','a',['a']]]
     this.appendValueInput("inputL")
         .setCheck(this.blockClass)
-        .appendField("");
+        .appendField("enumFromTo");
     this.appendValueInput("inputR")
         .setCheck(this.blockClass)
-        .appendField("+");
+        .appendField(" ");
     this.setInputsInline(true);
     this.setOutput(true, this.blockClass)
     this.setColour(this.blockClass[4]);
@@ -107,12 +112,14 @@ Blockly.Blocks['haskTestInputIntegral'] = {
 Blockly.Blocks['haskTestCoreIntegral'] = {
   init: function() {
 	this.blockClass = TypeClass[4]
+  this.functionContext = [['Integral', 'a'], ['a','a','a']]
+  this.currentContext = [['Integral', 'a'], ['a','a','a']]
     this.appendValueInput("inputL")
         .setCheck(this.blockClass)
-        .appendField("");
+        .appendField("div");
     this.appendValueInput("inputR")
         .setCheck(this.blockClass)
-        .appendField("+");
+        .appendField(" ");
     this.setInputsInline(true);
     this.setOutput(true, this.blockClass)
     this.setColour(this.blockClass[4]);
@@ -130,15 +137,17 @@ Blockly.Blocks['haskTestInputRealFloat'] = {
     }
 };
 
-Blockly.Blocks['haskTestCoreRealFloat'] = {
+Blockly.Blocks['haskTestCoreFractional'] = {
   init: function() {
-	this.blockClass = TypeClass[7]
+	this.blockClass = TypeClass[2]
+  this.functionContext = [['Fractional', 'a'], ['a','a','a']]
+  this.currentContext = [['Fractional', 'a'], ['a','a','a']]
     this.appendValueInput("inputL")
         .setCheck(this.blockClass)
         .appendField("");
     this.appendValueInput("inputR")
         .setCheck(this.blockClass)
-        .appendField("+");
+        .appendField("/");
     this.setInputsInline(true);
     this.setOutput(true, this.blockClass)
     this.setColour(this.blockClass[4]);
