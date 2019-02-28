@@ -472,6 +472,12 @@ Blockly.Connection.lastConnectionInRow_ = function(startBlock, orphanBlock) {
  * Disconnect this connection.
  */
 Blockly.Connection.prototype.disconnect = function() {
+  //newColour = this.check_[4]; //MARKER02
+  console.log('Disconnect', this.check_);
+  console.log(this.functionContext);
+  if (this.functionContext != undefined) {
+    console.log('Penus');
+  }
   var otherConnection = this.targetConnection;
   if (!otherConnection) {
     throw Error('Source connection not connected.');
@@ -567,13 +573,14 @@ Blockly.Connection.prototype.onCheckChanged_ = function() {
  * @return {!Blockly.Connection} The connection being modified
  *     (to allow chaining).
  */
-Blockly.Connection.prototype.setCheck = function(check) {
+Blockly.Connection.prototype.setCheck = function(check) { //MARKER03
   if (check) {
     // Ensure that check is in an array.
     if (!Array.isArray(check)) {
       check = [check];
     }
     this.check_ = check;
+    this.blockClassColour = this.check_[4];
     this.onCheckChanged_();
   } else {
     this.check_ = null;
@@ -666,7 +673,7 @@ var TypeClass0 = [
 var TypeClass = [
   [0, [], [1, 2], ['Int', 'Integer', 'Float', 'Double'], '#0061ff'],   //Num = Deep Blue
   [1, [0], [4, 5], ['Int', 'Integer', 'Float', 'Double'], '#7eacf7'], //Real = Baby Blue
-  [2, [0], [5, 6], ['Float',  'Double'], '#b6cff9'],            //Fractional = Ice Blue
+  [2, [0], [5, 6], ['Float',  'Double'], '#42f4b6'],            //Fractional = Ice Blue
   [3, [], [4], ['Int', 'Integer', 'Bool', 'Char', '()'], '#ff2600'],  //Enum = Red
   [4, [1, 3], [], ['Int', 'Integer'],'#f200ff'],                 //Integral = Purple
   [5, [1, 2], [7], ['Float', 'Double'],'#62f70c'],               //RealFrac = Light Green
@@ -747,6 +754,7 @@ Blockly.Connection.prototype.assignNewType = function(InputBlock) {
 //Runs whenever a block is hovering over another block (or it connected blocks
 //are moving?) used to lead to CheckChild() and CheckParent()
 Blockly.Connection.prototype.checkType_ = function(otherConnection) {
+  console.log(this.setColour);
   if (!this.check_ || !otherConnection.check_) {
     // One or both sides are promiscuous enough that anything will fit.
     return true;
@@ -785,12 +793,15 @@ return false;
 Blockly.Connection.prototype.CheckParent = function(Input, Static) {
   //console.log(Input);
   if (Static == undefined) {
+    newColour = 'noChange'
     return false;
   }
   else if (Static[1].indexOf(Input[0]) != -1) {
+    newColour = Static
     return true;
   }
   else {
+    newColour = Static
     return this.CheckParent(Input, TypeClass[Static[1][0]]);
   }
 };
@@ -819,13 +830,17 @@ Blockly.Connection.prototype.CheckChild = function(Input, Static) {
 //setColour & blockClass. if setColour can be edited so that block colours can
 //be updated / changed then the same can be done with a block's TypeClass.
 
-Blockly.Connection.prototype.CheckBlockType = function(Input, Static) {
-  if (Static.blockClass.includes(Input)){
-    console.log("WOWO");
-    return true
-  }
-  else {
-    console.log("FAILURE");
-    return true
-  }
-}
+// Blockly.Connection.prototype.functionContext = function(context) {
+//   this.functionContext = context
+//   return this
+//}
+
+var newColour = 'noChange'
+
+Blockly.Connection.prototype.returnNewColour = function() {
+  return newColour
+};
+
+Blockly.Connection.prototype.resetColour = function(){
+  newColour = 'noChange'
+};
